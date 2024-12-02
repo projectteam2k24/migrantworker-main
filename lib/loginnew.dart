@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(LoginPage());
+void main() => runApp(const LoginPage());
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

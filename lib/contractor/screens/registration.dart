@@ -387,7 +387,7 @@ class _RegisterContractor1State extends State<RegisterContractor1> {
   void PrevHandler() {
     Navigator.push(context, MaterialPageRoute(
       builder: (context) {
-        return RegisterContractor();
+        return const RegisterContractor();
       },
     )); // You can add further sign-up logic here, like calling an API
   }
