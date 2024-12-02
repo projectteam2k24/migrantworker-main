@@ -23,7 +23,7 @@ class _ContractorHomeState extends State<ContractorHome> {
       if (_selectedIndex == 0) {
         // Navigate to SearchJobPage
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const SearchJobPage()));
+            MaterialPageRoute(builder: (context) => const MyJobPageContractor()));
       } else if (_selectedIndex == 2) {
         // Navigate to WorkerStatusPage
         Navigator.pushReplacement(context,
@@ -342,7 +342,7 @@ class ProfileMenu extends StatelessWidget {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return const SearchJobPage(); // Navigate to WorkerDetailsPage
+                    return const MyJobPageContractor(); // Navigate to WorkerDetailsPage
                   },
                 ));
               },

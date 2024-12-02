@@ -1,201 +1,178 @@
 import 'package:flutter/material.dart';
-import 'package:migrantworker/contractor/screens/homepage.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-class SearchJobPage extends StatefulWidget {
-  const SearchJobPage({super.key});
+class MyJobPageContractor extends StatefulWidget {
+  const MyJobPageContractor({super.key});
 
   @override
-  _SearchJobPageState createState() => _SearchJobPageState();
+  _MyJobPageContractorState createState() => _MyJobPageContractorState();
 }
 
-class _SearchJobPageState extends State<SearchJobPage> {
-  String _selectedDateFilter = "Today";
+class _MyJobPageContractorState extends State<MyJobPageContractor> {
+  final List<Map<String, dynamic>> providerJobList = [
+    {
+      'jobTitle': 'Kitchen Renovation',
+      'address': '123 Main Street, Downtown City',
+      'location': 'Downtown City',
+      'squareFeet': '500 sqft',
+      'budget': '\$15,000',
+      'images': [
+        'assets/images/image1.jpg',
+        'assets/images/image2.jpg',
+        'assets/images/image3.jpg',
+      ],
+      'description':
+          'Renovation of the kitchen area to include modern appliances, countertops, and cabinets.',
+      'postedDate': 'Today',
+    },
+    {
+      'jobTitle': 'Bathroom Remodeling',
+      'address': '456 Elm Street, Riverside',
+      'location': 'Riverside Apartments',
+      'squareFeet': '300 sqft',
+      'budget': '\$8,000',
+      'images': [
+        'assets/images/image1.jpg',
+        'assets/images/image2.jpg',
+        'assets/images/image3.jpg',
+      ],
+      'description':
+          'Complete makeover of the bathroom with new fittings, tiles, and lighting.',
+      'postedDate': 'This Week',
+    },
+    {
+      'jobTitle': 'Roof Repair',
+      'address': '789 Pine Street, Hilltop',
+      'location': 'Hilltop Villas',
+      'squareFeet': '700 sqft',
+      'budget': '\$5,000',
+      'images': [
+        'assets/images/image1.jpg',
+        'assets/images/image2.jpg',
+        'assets/images/image3.jpg',
+      ],
+      'description':
+          'Repair and waterproofing of the roof to fix leaks and improve durability.',
+      'postedDate': 'This Month',
+    },
+  ];
+
+  List<Map<String, dynamic>> filteredJobList = [];
+  String? selectedLocation;
+  String? selectedDate;
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    filteredJobList = providerJobList; // Initially show all jobs
+  }
+
+  void filterJobs() {
+    setState(() {
+      filteredJobList = providerJobList.where((job) {
+        final matchesSearchQuery = searchQuery.isEmpty ||
+            job['jobTitle']
+                .toString()
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase());
+        final matchesLocation = selectedLocation == null ||
+            job['location'] == selectedLocation;
+        final matchesDate =
+            selectedDate == null || job['postedDate'] == selectedDate;
+
+        return matchesSearchQuery && matchesLocation && matchesDate;
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    double widthFactor = MediaQuery.of(context).size.width;
-    double heightFactor = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
+        title: const Text('My Jobs'),
+        centerTitle: true,
         backgroundColor: Colors.green,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back,
-              color: Colors.white), // Left arrow icon
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      const ContractorHome()), // Navigate to ContractorHome page
-            );
-          },
-        ),
-        title: Text(
-          "Search Job",
-          style: TextStyle(
-            fontSize: widthFactor * 0.06,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.all(widthFactor * 0.05),
-        child: ListView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Job Type Search Bar
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Search the job type",
-                          filled: true,
-                          fillColor: Colors.green.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(widthFactor * 0.03),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: widthFactor * 0.02),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add search functionality here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor: Colors.green,
-                        padding: EdgeInsets.all(widthFactor * 0.03),
-                      ),
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+            // Search Bar
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Search jobs by name',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: heightFactor * 0.02),
-
-                // Property Location Search Bar
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Property Location",
-                          filled: true,
-                          fillColor: Colors.green.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(widthFactor * 0.03),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: widthFactor * 0.02),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add search functionality here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor: Colors.green,
-                        padding: EdgeInsets.all(widthFactor * 0.03),
-                      ),
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+              ),
+              onChanged: (value) {
+                searchQuery = value;
+                filterJobs();
+              },
+            ),
+            const SizedBox(height: 16),
+            // Location Dropdown
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Search by location',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: heightFactor * 0.03),
-
-                // Filtering System with Dropdown
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Posted Dates",
-                      style: TextStyle(
-                        fontSize: widthFactor * 0.04,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: widthFactor * 0.02),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(widthFactor * 0.03),
-                      ),
-                      child: DropdownButton<String>(
-                        value: _selectedDateFilter,
-                        items: [
-                          "Today",
-                          "This Week",
-                          "This Month",
-                          "Last 3 Months",
-                          "Last 6 Months"
-                        ]
-                            .map((date) => DropdownMenuItem<String>(
-                                  value: date,
-                                  child: Text(date),
-                                ))
-                            .toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedDateFilter = newValue!;
-                          });
-                        },
-                        underline: Container(),
-                        dropdownColor: Colors.white, // Set dropdown color
-                      ),
-                    ),
-                  ],
+              ),
+              items: providerJobList
+                  .map((job) => job['location'])
+                  .toSet()
+                  .map<DropdownMenuItem<String>>((location) {
+                return DropdownMenuItem<String>(
+                  value: location,
+                  child: Text(location),
+                );
+              }).toList(),
+              value: selectedLocation,
+              onChanged: (value) {
+                setState(() {
+                  selectedLocation = value;
+                  filterJobs();
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            // Posted Date Dropdown
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Search by posted date',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                SizedBox(height: heightFactor * 0.03),
-
-                // "Top Jobs" Section
-                Text(
-                  "Top Jobs",
-                  style: TextStyle(
-                    fontSize: widthFactor * 0.05,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-                SizedBox(height: heightFactor * 0.02),
-
-                // Job Cards
-                const JobCard(
-                  jobTitle: "Painter Needed",
-                  jobDetails: "Location: Downtown, 3 Bedrooms",
-                  jobDate: "Posted 2 days ago",
-                ),
-                const JobCard(
-                  jobTitle: "Plumber Required",
-                  jobDetails: "Location: Uptown, 1 Bathroom",
-                  jobDate: "Posted 1 week ago",
-                ),
-                const JobCard(
-                  jobTitle: "Electrician Service",
-                  jobDetails: "Location: Suburb, Electrical Wiring",
-                  jobDate: "Posted 1 month ago",
-                ),
-                const JobCard(
-                  jobTitle: "Carpenter Required",
-                  jobDetails: "Location: Central, 5 Doors",
-                  jobDate: "Posted 3 months ago",
-                ),
-              ],
+              ),
+              items: ['Today', 'Yesterday', 'This Week', 'This Month', 'This Year']
+                  .map<DropdownMenuItem<String>>((date) {
+                return DropdownMenuItem<String>(
+                  value: date,
+                  child: Text(date),
+                );
+              }).toList(),
+              value: selectedDate,
+              onChanged: (value) {
+                setState(() {
+                  selectedDate = value;
+                  filterJobs();
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            // Jobs List
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredJobList.length,
+                itemBuilder: (context, index) {
+                  final job = filteredJobList[index];
+                  return JobCard(job: job);
+                },
+              ),
             ),
           ],
         ),
@@ -205,65 +182,274 @@ class _SearchJobPageState extends State<SearchJobPage> {
 }
 
 class JobCard extends StatelessWidget {
-  final String jobTitle;
-  final String jobDetails;
-  final String jobDate;
+  final Map<String, dynamic> job;
 
-  const JobCard({
-    super.key,
-    required this.jobTitle,
-    required this.jobDetails,
-    required this.jobDate,
-  });
+  const JobCard({super.key, required this.job});
 
   @override
   Widget build(BuildContext context) {
-    double widthFactor = MediaQuery.of(context).size.width;
-    double heightFactor = MediaQuery.of(context).size.height;
-
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: heightFactor * 0.02),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(widthFactor * 0.03),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: widthFactor * 0.02,
-            spreadRadius: widthFactor * 0.01,
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 12.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image Slider
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 200.0,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  enableInfiniteScroll: true,
+                ),
+                items: job['images'].map<Widget>((imageUrl) {
+                  return ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    child: Image.asset(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.broken_image,
+                          size: 100,
+                          color: Colors.grey,
+                        );
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Job Title
+                    Text(
+                      job['jobTitle'],
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Address
+                    Row(
+                      children: [
+                        const Icon(Icons.home, size: 16, color: Colors.grey),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            job['address'],
+                            style: const TextStyle(fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // Location
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on,
+                            size: 16, color: Colors.grey),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Location: ${job['location']}',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // Square Feet
+                    Row(
+                      children: [
+                        const Icon(Icons.square_foot,
+                            size: 16, color: Colors.grey),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Size: ${job['squareFeet']}',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // Budget
+                    Row(
+                      children: [
+                        const Icon(Icons.attach_money,
+                            size: 16, color: Colors.grey),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Budget: ${job['budget']}',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // Positioned "View in Detail" button at the bottom-right
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JobDetailPage(job: job),
+                  ),
+                );
+              },
+              child: const Text(
+                'View in Detail',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(widthFactor * 0.04),
+    );
+  }
+}
+
+class JobDetailPage extends StatelessWidget {
+  final Map<String, dynamic> job;
+
+  const JobDetailPage({super.key, required this.job});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(job['jobTitle']),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Job Title
             Text(
-              jobTitle,
-              style: TextStyle(
-                fontSize: widthFactor * 0.05,
+              job['jobTitle'],
+              style: const TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.green,
               ),
             ),
-            SizedBox(height: heightFactor * 0.01),
-            Text(
-              jobDetails,
-              style: TextStyle(
-                fontSize: widthFactor * 0.04,
-                color: Colors.black54,
+            const SizedBox(height: 16),
+            // Image Slider
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 300.0,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                enableInfiniteScroll: true,
+              ),
+              items: job['images'].map<Widget>((imageUrl) {
+                return ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: Image.asset(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.broken_image,
+                        size: 100,
+                        color: Colors.grey,
+                      );
+                    },
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+            // Job Description
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    offset: Offset(0, 4),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Job Description:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    job['description'] ?? 'No description available.',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: heightFactor * 0.01),
-            Text(
-              jobDate,
-              style: TextStyle(
-                fontSize: widthFactor * 0.03,
-                color: Colors.green.withOpacity(0.7),
-              ),
+            const SizedBox(height: 16),
+            // Address
+            Row(
+              children: [
+                const Icon(Icons.home, size: 16, color: Colors.grey),
+                const SizedBox(width: 8),
+                Text(job['address'], style: const TextStyle(fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Location
+            Row(
+              children: [
+                const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                const SizedBox(width: 8),
+                Text('Location: ${job['location']}',
+                    style: const TextStyle(fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Square Feet
+            Row(
+              children: [
+                const Icon(Icons.square_foot, size: 16, color: Colors.grey),
+                const SizedBox(width: 8),
+                Text('Size: ${job['squareFeet']}',
+                    style: const TextStyle(fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Budget
+            Row(
+              children: [
+                const Icon(Icons.attach_money, size: 16, color: Colors.grey),
+                const SizedBox(width: 8),
+                Text('Budget: ${job['budget']}',
+                    style: const TextStyle(fontSize: 14)),
+              ],
             ),
           ],
         ),

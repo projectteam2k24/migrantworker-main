@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class ProviderJobsPage extends StatelessWidget {
-  const ProviderJobsPage({super.key});
+class MyJobPage extends StatelessWidget {
+  const MyJobPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Sample data for jobs posted by the provider
+    // Updated job data with 'description' field
     final List<Map<String, dynamic>> providerJobList = [
       {
         'jobTitle': 'Kitchen Renovation',
@@ -15,10 +15,12 @@ class ProviderJobsPage extends StatelessWidget {
         'squareFeet': '500 sqft',
         'budget': '\$15,000',
         'images': [
-          'assets/image1.jpg',
-          'assets/image2.jpg',
-          'assets/image3.jpg',
+          'assets/images/image1.jpg',
+          'assets/images/image2.jpg',
+          'assets/images/image3.jpg',
         ],
+        'description':
+            'Renovation of the kitchen area to include modern appliances, countertops, and cabinets.',
       },
       {
         'jobTitle': 'Bathroom Remodeling',
@@ -27,10 +29,12 @@ class ProviderJobsPage extends StatelessWidget {
         'squareFeet': '300 sqft',
         'budget': '\$8,000',
         'images': [
-          'assets/image1.jpg',
-          'assets/image2.jpg',
-          'assets/image3.jpg',
+          'assets/images/image1.jpg',
+          'assets/images/image2.jpg',
+          'assets/images/image3.jpg',
         ],
+        'description':
+            'Complete makeover of the bathroom with new fittings, tiles, and lighting.',
       },
       {
         'jobTitle': 'Roof Repair',
@@ -39,10 +43,12 @@ class ProviderJobsPage extends StatelessWidget {
         'squareFeet': '700 sqft',
         'budget': '\$5,000',
         'images': [
-          'assets/image1.jpg',
-          'assets/image2.jpg',
-          'assets/image3.jpg',
+          'assets/images/image1.jpg',
+          'assets/images/image2.jpg',
+          'assets/images/image3.jpg',
         ],
+        'description':
+            'Repair and waterproofing of the roof to fix leaks and improve durability.',
       },
     ];
 
@@ -184,7 +190,6 @@ class ProviderJobsPage extends StatelessWidget {
                     right: 16,
                     child: TextButton(
                       onPressed: () {
-                        // Navigate to detailed job view (add the navigation logic here)
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -210,7 +215,6 @@ class ProviderJobsPage extends StatelessWidget {
     );
   }
 }
-
 
 class JobDetailPage extends StatelessWidget {
   final Map<String, dynamic> job;
@@ -267,35 +271,31 @@ class JobDetailPage extends StatelessWidget {
               }).toList(),
             ),
             const SizedBox(height: 16),
-
-            // Job Description Container with Shadow
+            // Job Description
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.7), // Light white background with slight opacity
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: const [
                   BoxShadow(
-                    color: Colors.black12, // Subtle shadow
+                    color: Colors.black12,
                     offset: Offset(0, 4),
                     blurRadius: 6,
                   ),
                 ],
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Job Description Title
-                  Text(
+                  const Text(
                     'Job Description:',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
-                  // Job Description Text
+                  const SizedBox(height: 8),
                   Text(
-                    'Looking for a skilled professional for a kitchen renovation project. Tasks include replacing countertops, cabinets, flooring, and lighting, as well as installing new appliances. The job requires expertise in design, plumbing, and electrical work. Ideal candidates should have experience in creating functional, modern, and stylish kitchen spaces.',
-                    style: TextStyle(fontSize: 14),
+                    job['description'] ?? 'No description available.',
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ],
               ),
@@ -345,272 +345,3 @@ class JobDetailPage extends StatelessWidget {
     );
   }
 }
-
-class JobDetailPage1 extends StatelessWidget {
-  final Map<String, dynamic> job;
-
-  const JobDetailPage1({super.key, required this.job});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(job['jobTitle']),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Job Title
-            Text(
-              job['jobTitle'],
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Image Slider
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 300.0,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                enableInfiniteScroll: true,
-              ),
-              items: job['images'].map<Widget>((imageUrl) {
-                return ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: Image.asset(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.broken_image,
-                        size: 100,
-                        color: Colors.grey,
-                      );
-                    },
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-
-            // Job Description Container with Shadow
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.7), // Light white background with slight opacity
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12, // Subtle shadow
-                    offset: Offset(0, 4),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Job Description Title
-                  Text(
-                    'Job Description:',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  // Job Description Text
-                  Text(
-                    'Seeking a professional for a bathroom remodeling project. Responsibilities include updating fixtures, replacing flooring, installing new tiles, vanities, and lighting, and improving plumbing and electrical systems. The goal is to enhance the space’s functionality, design, and efficiency while creating a modern and stylish bathroom that suits the homeowner’s needs.',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Address
-            Row(
-              children: [
-                const Icon(Icons.home, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(job['address'], style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Location
-            Row(
-              children: [
-                const Icon(Icons.location_on, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text('Location: ${job['location']}',
-                    style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Square Feet
-            Row(
-              children: [
-                const Icon(Icons.square_foot, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text('Size: ${job['squareFeet']}',
-                    style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Budget
-            Row(
-              children: [
-                const Icon(Icons.attach_money, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text('Budget: ${job['budget']}',
-                    style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class JobDetailPage2 extends StatelessWidget {
-  final Map<String, dynamic> job;
-
-  const JobDetailPage2({super.key, required this.job});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(job['jobTitle']),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Job Title
-            Text(
-              job['jobTitle'],
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Image Slider
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 300.0,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                enableInfiniteScroll: true,
-              ),
-              items: job['images'].map<Widget>((imageUrl) {
-                return ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: Image.asset(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.broken_image,
-                        size: 100,
-                        color: Colors.grey,
-                      );
-                    },
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-
-            // Job Description Container with Shadow
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.7), // Light white background with slight opacity
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12, // Subtle shadow
-                    offset: Offset(0, 4),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Job Description Title
-                  Text(
-                    'Job Description:',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  // Job Description Text
-                  Text(
-                    'Looking for an experienced professional for roof repair. Tasks include identifying and fixing leaks, replacing damaged shingles, and ensuring proper insulation and ventilation. The job requires expertise in various roofing materials and techniques to restore the roof’s integrity, prevent further damage, and extend its lifespan.',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Address
-            Row(
-              children: [
-                const Icon(Icons.home, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(job['address'], style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Location
-            Row(
-              children: [
-                const Icon(Icons.location_on, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text('Location: ${job['location']}',
-                    style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Square Feet
-            Row(
-              children: [
-                const Icon(Icons.square_foot, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text('Size: ${job['squareFeet']}',
-                    style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Budget
-            Row(
-              children: [
-                const Icon(Icons.attach_money, size: 16, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text('Budget: ${job['budget']}',
-                    style: const TextStyle(fontSize: 14)),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-

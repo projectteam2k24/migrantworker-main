@@ -17,5 +17,5 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
-  runApp(const MaterialApp(debugShowCheckedModeBanner: false, home: ProviderJobsPage()));
+  runApp(const MaterialApp(debugShowCheckedModeBanner: false, home: ContractorHome()));
 }
